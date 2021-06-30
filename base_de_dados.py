@@ -3,13 +3,14 @@ import pathlib
 import sqlite3
 
 class SingletonMeta(type):
-    _instances = {}
+    _instancias = {}
+
     def __call__(cls, *args, **kwargs):
 
-        if cls not in cls._instances:
+        if cls not in cls._instancias:
             instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
+            cls._instancias[cls] = instance
+        return cls._instancias[cls]
 
 
 class Query:
@@ -60,7 +61,7 @@ class Database(Query, metaclass=SingletonMeta):
     def __init__(self):
 
         self._db_path = pathlib.Path(__file__).parent.absolute()
-        self._db_path = os.path.join(self._db_path, "DB")
+        self._db_path = os.path.join(self._db_path, "arquivo_db.db")
         Database.total_instancias +=1
 
         if not os.path.isfile(self.get_db_path):
@@ -70,7 +71,7 @@ class Database(Query, metaclass=SingletonMeta):
 
     @property
     def get_db_path(self):
-        return self._db_path + "local.db"
+        return self._db_path
 
     def get_tasks(self, project_id):
         pass
