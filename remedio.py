@@ -20,8 +20,6 @@ class Remedio():
             except:
                 pass
 
-            print('cadastrado...')
-
     @property
     def get_nome(self):
         return self._nome
@@ -43,20 +41,31 @@ class Remedio():
         print(f'Nome: {self.get_nome}')
         print(f'Preço: {self.get_preco}')
         print(f'Quantidade estoque: {self.get_qtd}')
-        print('--------------\n')
+        print('--------------')
 
     def decrementar_qtd(self, qtd):
         self._qtd -= qtd
+        self.db_atualizar()
 
-    def incrementar_qtd(self, qtd):
-        self._qtd -= qtd
+    def atualizar_preco(self, novo_preco):
+        self._preco = novo_preco
+        self.db_atualizar()
+
+    def atualizar_nome(self, nome):
+        self._nome = nome
+        self.db_atualizar()
+
+    def atualizar_qtd(self, qtd):
+        self._qtd += qtd;
+        self.db_atualizar()
 
     def db_salvar(self, codigo_barras, nome, qtd, preco):
         db = Database()
         db.salvar(codigo_barras, nome, qtd, preco)
 
     def db_atualizar(self):
-        pass
+        db = Database()
+        db.atualizar(self.get_qtd, self.get_codigo_barras, self.get_nome, self.get_preco)
 
     def db_deletar(self):
         pass

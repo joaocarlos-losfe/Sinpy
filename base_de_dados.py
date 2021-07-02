@@ -2,17 +2,6 @@ import os
 import pathlib
 import sqlite3
 
-class SingletonMeta(type):
-    _instancias = {}
-
-    def __call__(cls, *args, **kwargs):
-
-        if cls not in cls._instancias:
-            instance = super().__call__(*args, **kwargs)
-            cls._instancias[cls] = instance
-        return cls._instancias[cls]
-
-
 class Query:
     @staticmethod
     def query_criar_tabela():
@@ -34,14 +23,14 @@ class Query:
                 """
 
     @staticmethod
-    def query_atualizar(self):
+    def query_atualizar():
         return  """
                 UPDATE Medicamentos
-                SET qtd = ?, nome = ?
-                WHERE codigo_de_barras = ?;
+                SET qtd = ?, nome = ?, preco = ?
+                WHERE codigo_de_barras = ?
                 """
     @staticmethod
-    def query_delete(self):
+    def query_delete():
         return  """
                 DELETE FROM Medicamentos WHERE codigo_de_barras = ?
                 """
@@ -52,15 +41,26 @@ class Query:
                     SELECT * FROM Medicamentos
                 """
 
+class SingletonMeta(type):
+    _instancias = {}
+
+    def __call__(cls, *args, **kwargs):
+
+        if cls not in cls._instancias:
+            instance = super().__call__(*args, **kwargs)
+            cls._instancias[cls] = instance
+        return cls._instancias[cls]
+
+
 class Database(Query, metaclass=SingletonMeta):
 
-    total_instancias = 0
+    #total_instancias = 0
 
     def __init__(self):
 
         self._db_path = pathlib.Path(__file__).parent.absolute()
         self._db_path = os.path.join(self._db_path, "arquivo_db.db")
-        Database.total_instancias +=1
+        #Database.total_instancias +=1
 
         if not os.path.isfile(self.get_db_path):
             conn = sqlite3.connect(self.get_db_path)
@@ -89,8 +89,12 @@ class Database(Query, metaclass=SingletonMeta):
         exec.execute(super().query_salvar(), (codigo_barras, nome, qtd, preco, ))
         conn.commit()
 
-    def atualizar(self):
-        pass
+    def atualizar(self, qtd, codigo_barras, nome, preco):
+        conn = sqlite3.connect(self.get_db_path)
+        exec = conn.cursor()
+
+        exec.execute(super().query_atualizar(), (qtd, nome, preco, codigo_barras, ))
+        conn.commit()
 
     def deletar(self, task_id):
         pass
