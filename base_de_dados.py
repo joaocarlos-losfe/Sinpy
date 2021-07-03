@@ -95,6 +95,3 @@ class Database(Query, metaclass=SingletonMeta):
 
         exec.execute(super().query_atualizar(), (qtd, nome, preco, codigo_barras, ))
         conn.commit()
-
-    def deletar(self, task_id):
-        pass

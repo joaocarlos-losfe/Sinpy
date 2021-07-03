@@ -36,13 +36,6 @@ class Remedio():
     def get_preco(self):
         return  self._preco
 
-    def __str__(self):
-        print(f'Codigo barras: {self.get_codigo_barras}')
-        print(f'Nome: {self.get_nome}')
-        print(f'Preço: {self.get_preco}')
-        print(f'Quantidade estoque: {self.get_qtd}')
-        print('--------------')
-
     def decrementar_qtd(self, qtd):
         self._qtd -= qtd
         self.db_atualizar()
@@ -66,6 +59,3 @@ class Remedio():
     def db_atualizar(self):
         db = Database()
         db.atualizar(self.get_qtd, self.get_codigo_barras, self.get_nome, self.get_preco)
-
-    def db_deletar(self):
-        pass

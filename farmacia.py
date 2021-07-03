@@ -93,11 +93,15 @@ class Farmacia:
 
     def mostrar_estoque(self):
         for medicamento in self._estoque.values():
-            print(medicamento.__str__())
+            print(f'Codigo barras: {medicamento.get_codigo_barras}')
+            print(f'Nome: {medicamento.get_nome}')
+            print(f'Preço: {medicamento.get_preco}')
+            print(f'Quantidade estoque: {medicamento.get_qtd}')
+            print('--------------')
 
     def db_carregar_medicamentos(self):
         db = Database()
-        dados = db.get_medicamentos()
+        dados = db.get_medicamentos() #retorna uma lista de conjuntos
 
         for medicamento in dados:
             remedio = Remedio()
