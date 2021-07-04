@@ -23,7 +23,7 @@ class Farmacia:
             elif op == '2':
                 self.mostrar_estoque()
             elif op == '3':
-                pass
+                self.atualizar_medicamento()
             else:
                 print('opção invalida...')
 
@@ -52,7 +52,32 @@ class Farmacia:
             print('--------------')
 
     def atualizar_medicamento(self):
-        pass
+        codigo_barras = input('codigo de barras: ')
+
+        if codigo_barras in self._estoque:
+            if self._estoque[codigo_barras].get_qtd == 0:
+                print('atenção, medicamento precisa ser reposto..')
+
+            print('1 - atualizar nome')
+            print('2 - atualizar preço')
+            print('3 - incrementar estoque')
+
+            op = input()
+
+            if op == '1':
+                nome = input('Novo nome: ')
+                self._estoque[codigo_barras].atualizar_nome(nome)
+                print('Nome atualizado...\n')
+
+            elif op == '2':
+                preco = float(input('Novo preço: '))
+                self._estoque[codigo_barras].atualizar_preco(preco)
+                print('Preco atualizado\n')
+
+            elif op == '3':
+                qtd = int(input('Quantidade: '))
+                self._estoque[codigo_barras].atualizar_qtd(qtd)
+                print('Quantidade atualizada\n')
 
     def db_carregar_medicamentos(self):
         db = Database()
